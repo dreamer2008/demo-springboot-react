@@ -1,8 +1,7 @@
 package com.tom.demo.service;
 
-import com.tom.demo.dto.CreateUserDto;
+import com.tom.demo.dto.UserDto;
 import com.tom.demo.model.User;
-import com.tom.demo.util.Mapper;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -29,8 +28,8 @@ class UserServiceIntegrationTest {
     @Order(1)
     @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
     void testSave(String userName, String email, String password) {
-        CreateUserDto createUserDto = new CreateUserDto().setUserName(userName).setEmail(email).setPassword(password);
-        User user = userService.save(createUserDto);
+        UserDto userDto = new UserDto().setUserName(userName).setEmail(email).setPassword(password);
+        User user = userService.save(userDto);
         assertThat(user.getId()).isGreaterThan(0L);
     }
 
@@ -46,8 +45,8 @@ class UserServiceIntegrationTest {
 //    @ValueSource(strings = {"Tom","Mary"})
     @MethodSource("userNames")
     void testListByUserName(String userName) {
-        List<User> list = userService.listByUserName(userName);
-        assertThat(list.size()).isGreaterThanOrEqualTo(1);
+        User user = userService.getByUserName(userName);
+        assertThat(user.getId()).isGreaterThanOrEqualTo(1);
     }
 
     private static String[] userNames() {

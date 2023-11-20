@@ -1,7 +1,7 @@
 package com.tom.demo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tom.demo.dto.CreateUserDto;
+import com.tom.demo.dto.UserDto;
 import com.tom.demo.model.User;
 import com.tom.demo.service.UserService;
 import com.tom.demo.util.UserTestUtil;
@@ -15,7 +15,6 @@ import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -31,7 +30,7 @@ public class UserControllerTest extends BaseControllerTest {
 
     static List<User> list = new ArrayList<>();
 
-    private final CreateUserDto createUserDTO = new CreateUserDto();
+    private final UserDto userDTO = new UserDto();
 
     @MockBean
     private UserService UserService;
@@ -39,20 +38,20 @@ public class UserControllerTest extends BaseControllerTest {
     @BeforeEach
     void setup() {
         // Setup
-        createUserDTO.setUserName("user1");
-        createUserDTO.setEmail("email1");
-        createUserDTO.setPassword("passwd1");
+        userDTO.setUserName("user1");
+        userDTO.setEmail("email1");
+        userDTO.setPassword("passwd1");
     }
 
     @Test
     @SneakyThrows
     void testSave() {
         // Setup
-        when(UserService.save(createUserDTO)).thenReturn(UserTestUtil.createUserList().get(0));
+        when(UserService.save(userDTO)).thenReturn(UserTestUtil.createUserList().get(0));
 
         // Run the test
         final MockHttpServletResponse response = mockMvc.perform(post(BASE_URL + "/save")
-                        .content(objectMapper.writeValueAsString(createUserDTO))
+                        .content(objectMapper.writeValueAsString(userDTO))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();

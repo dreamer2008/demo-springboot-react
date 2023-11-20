@@ -1,27 +1,29 @@
 package com.tom.demo.service;
 
 import com.tom.demo.dao.UserDao;
-import com.tom.demo.dto.CreateUserDto;
+import com.tom.demo.dto.UserDto;
 import com.tom.demo.model.User;
 import com.tom.demo.util.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
 
-    private final UserDao userDao;
+    @Resource
+    private UserDao userDao;
 
-    @Autowired
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
+    @Resource
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    public User save(CreateUserDto createUserDto) {
-        User user = Mapper.INSTANCE.toModel(createUserDto);
+    public User save(UserDto userDto) {
+        User user = Mapper.INSTANCE.toModel(userDto);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         Date now = new Date();
         user.setCreateTime(now).setUpdateTime(now);
         return userDao.save(user);
@@ -32,7 +34,24 @@ public class UserService {
         return list;
     }
 
-    public List<User> listByUserName(String userName) {
-        return userDao.findByUserName(userName);
+    public User getByUserName(String userName) {
+        List<User> list = userDao.findByUserName(userName);
+        return list == null ? null : list.get(0);
+    }
+
+    public User getById(Long id) {
+        Optional<User> optionalUser = userDao.findById(id);
+        return optionalUser.get();
+    }
+
+    public User updateUser(UserDto userDto) {
+        User user = Mapper.INSTANCE.toModel(userDto);
+        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        Date now = new Date();
+        user.setCreateTime(now).setUpdateTime(now);
+        return userDao.save(user);
+    }
+    public void deleteById(Long id) {
+        userDao.deleteById(id);
     }
 }

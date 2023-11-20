@@ -1,7 +1,7 @@
 package com.tom.demo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tom.demo.dto.CreateUserDto;
+import com.tom.demo.dto.UserDto;
 import com.tom.demo.model.User;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -22,14 +21,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 public class UserControllerIntegrationTest extends BaseControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private CreateUserDto createUserDTO = new CreateUserDto();
+    private UserDto userDTO = new UserDto();
 
     @BeforeEach
     void setup() {
         // Setup
-        createUserDTO.setUserName("user1");
-        createUserDTO.setEmail("email1");
-        createUserDTO.setPassword("passwd1");
+        userDTO.setUserName("user1");
+        userDTO.setEmail("email1");
+        userDTO.setPassword("passwd1");
     }
 
     @Test
@@ -37,7 +36,7 @@ public class UserControllerIntegrationTest extends BaseControllerTest {
     @SneakyThrows
     void testSave() {
         final MockHttpServletResponse response = mockMvc.perform(post(BASE_URL + "/save")
-                        .content(objectMapper.writeValueAsString(createUserDTO))
+                        .content(objectMapper.writeValueAsString(userDTO))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();

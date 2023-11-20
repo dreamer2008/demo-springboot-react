@@ -1,6 +1,6 @@
 package com.tom.demo.util;
 
-import com.tom.demo.dto.CreateUserDto;
+import com.tom.demo.dto.UserDto;
 import com.tom.demo.model.User;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
@@ -12,8 +12,8 @@ public interface Mapper {
 
     Mapper INSTANCE = Mappers.getMapper(Mapper.class);
 
-    User toModel(CreateUserDto userDto);
+    User toModel(UserDto userDto);
 
-    List<User> toModels(List<CreateUserDto> list);
+    List<User> toModels(List<UserDto> list);
 
 }

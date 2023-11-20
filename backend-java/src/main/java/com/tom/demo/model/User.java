@@ -25,7 +25,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    @JsonIgnore
+//    @JsonIgnore
     private Long id;
 
     @ApiModelProperty(name = "Username", required = true)
@@ -35,12 +35,13 @@ public class User implements Serializable {
 
     @ApiModelProperty(name = "Password", required = true)
     @Column(name = "password", nullable = false)
-    @Length(min = 6, max = 10, message = "The length of password must be between 6 and 10")
-    private String password;    //TODO use jasypt to encrypt
+    @Length(min = 6, max = 60, message = "The length of password must be between 6 and 10")
+    @JsonIgnore
+    private String password;    //TODO use Spring Security BCrypt to encrypt
 
     @ApiModelProperty(name = "Email", required = true)
     @Column(name = "email", nullable = false)
-    @NotBlank(message = "Username cannot be empty", groups = UserAddGroup.class)
+//    @NotBlank(message = "Email cannot be empty", groups = UserAddGroup.class)
     private String email;
 
     @ApiModelProperty(name = "State(Validity)", example = "1: valid, 0: invalid")

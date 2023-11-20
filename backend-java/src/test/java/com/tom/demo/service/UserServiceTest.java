@@ -1,7 +1,7 @@
 package com.tom.demo.service;
 
 import com.tom.demo.dao.UserDao;
-import com.tom.demo.dto.CreateUserDto;
+import com.tom.demo.dto.UserDto;
 import com.tom.demo.model.User;
 import com.tom.demo.util.UserTestUtil;
 import org.junit.jupiter.api.Order;
@@ -34,9 +34,9 @@ class UserServiceTest {
     @CsvFileSource(resources = "/data.csv", numLinesToSkip = 1)
     void testSave(String userName, String email, String password) {
         User user = new User().setUserName(userName).setEmail(email).setPassword(password);
-        CreateUserDto createUserDto = new CreateUserDto().setUserName(userName).setEmail(email).setPassword(password);
+        UserDto userDto = new UserDto().setUserName(userName).setEmail(email).setPassword(password);
         when(userDao.save(ArgumentMatchers.any(User.class))).thenReturn(user);
-        User entitySaved = userService.save(createUserDto);
+        User entitySaved = userService.save(userDto);
         String userNameSaved = entitySaved.getUserName();
         assertThat("Tom".equals(userNameSaved) || "Mary".equals(userNameSaved));
     }
@@ -55,9 +55,8 @@ class UserServiceTest {
     void testListByUserName(String userName) {
         List<User> userList = UserTestUtil.createUserList().stream().filter(it -> userName.equals(it.getUserName())).collect(Collectors.toList());
         when(userDao.findByUserName(userName)).thenReturn(userList);
-        List<User> list = userService.listByUserName(userName);
-        assertThat(list.size()).isEqualTo(userList.size());
-        assertThat(list.stream().filter(it -> userName.equals(it.getUserName())).count()).isEqualTo(1L);
+        User user = userService.getByUserName(userName);
+        assertThat(user.getId()).isGreaterThanOrEqualTo(1L);
     }
 
 
