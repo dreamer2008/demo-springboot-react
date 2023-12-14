@@ -20,8 +20,8 @@ class EmployeeController(@Autowired private val employeeService: EmployeeService
 
 
     //gets the requested employee
-    @GetMapping("employees/{id}")
-    fun getEmployeeByWwid(@PathVariable id: Int): Employee =
+    @GetMapping("/{id}")
+    fun getEmployeeById(@PathVariable id: Int): Employee =
         employeeService.getEmployeeById(id) ?: throw ResponseStatusException(
             HttpStatus.NOT_FOUND,
             "This employee does not exist"

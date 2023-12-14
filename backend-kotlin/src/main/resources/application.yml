@@ -6,3 +6,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     password:
     username:
+  jpa:
+    database: mysql
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
